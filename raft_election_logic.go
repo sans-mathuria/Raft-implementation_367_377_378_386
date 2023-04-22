@@ -99,10 +99,21 @@ func (this *RaftNode) startElection() {
 				// You probably need to have implemented becomeFollower before this.
 
 				//-------------------------------------------------------------------------------------------/
-				if reply.Term > {
+				if reply.Term > this.currentTerm {
 					// TODO
-				} else if reply.Term ==  {
+					this.write_log("Candidate's term is older, switching to Follower") 
+					this.becomeFollower(reply.Term)
+					return
+				} else if reply.Term == this.currentTerm  {
 					// TODO
+					if reply.VoteGranted {
+						votesReceived += 1
+						if votesReceived > (len(this.peersIds)+1)/2 {
+							this.write_log("Candidate %d won the election", this.id)
+							this.startLeader()
+							return
+						}
+					}
 				}
 				//-------------------------------------------------------------------------------------------/
 
@@ -122,4 +133,9 @@ func (this *RaftNode) becomeFollower(term int) {
 	//-------------------------------------------------------------------------------------------/
 	// TODO
 	//-------------------------------------------------------------------------------------------/
+	this.state = "Follower"
+	this.votedFor = -1
+	this.currentTerm = term
+	this.lastElectionTimerStartedTime = time.Now()
+	go this.startElectionTimer()
 }
