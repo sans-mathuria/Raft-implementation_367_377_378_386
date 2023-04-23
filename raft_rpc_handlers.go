@@ -50,10 +50,18 @@ func (this *RaftNode) HandleRequestVote(args RequestVoteArgs, reply *RequestVote
 	//-------------------------------------------------------------------------------------------/
 	if this.currentTerm == args.Term { // TODO: what are the conditions necessary to vote? HINT: there's multiple.
 		if this.votedFor == -1 || this.votedFor == args.CandidateId && nodeLastLogIndex <= args.LastLogIndex && nodeLastLogTerm == args.LastLogTerm {
+<<<<<<< HEAD
 			this.votedFor = args.CandidateId
 			reply.VoteGranted = true
 			this.lastElectionTimerStartedTime = time.Now()
 
+=======
+				this.votedFor = args.CandidateId
+				reply.VoteGranted = true
+				this.lastElectionTimerStartedTime = time.Now()
+
+
+>>>>>>> b243d7da2a998465c66b61b8a5bef68f6aa44c56
 		}
 		// TODO: indicate that it has voted.
 
