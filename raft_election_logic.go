@@ -101,10 +101,10 @@ func (this *RaftNode) startElection() {
 				//-------------------------------------------------------------------------------------------/
 				if reply.Term > this.currentTerm {
 					// TODO
-					this.write_log("Candidate's term is older, switching to Follower") 
+					this.write_log("Candidate's term is older, switching to Follower")
 					this.becomeFollower(reply.Term)
 					return
-				} else if reply.Term == this.currentTerm  {
+				} else if reply.Term == this.currentTerm {
 					// TODO
 					if reply.VoteGranted {
 						votesReceived += 1

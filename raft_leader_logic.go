@@ -108,12 +108,12 @@ func (this *RaftNode) broadcastHeartbeats() {
 						//-------------------------------------------------------------------------------------------/
 						// TODO
 						//-------------------------------------------------------------------------------------------/
-						this.nextIndex[peerId] += len(entries)
-						// this.matchIndex[peerId] = this.nextIndex[peerId] - 1	
-						this.matchIndex[peerId] = (this.nextIndex[peerId] - 1) - len(entries)	
-						if this.matchIndex[peerId] < this.commitIndex {	
-							this.matchIndex[peerId] = this.commitIndex	
-						}	
+						this.nextIndex[peerId] = len(entries)
+						// this.matchIndex[peerId] = this.nextIndex[peerId] - 1
+						this.matchIndex[peerId] = 0
+						if this.matchIndex[peerId] < this.commitIndex {
+							this.matchIndex[peerId] = this.commitIndex
+						}
 
 						if (aeType == "Heartbeat" && LogHeartbeatMessages) || aeType == "AppendEntries" {
 							this.write_log("%s reply from NODE %d success: nextIndex := %v, matchIndex := %v", aeType, peerId, this.nextIndex, this.matchIndex)
@@ -158,7 +158,7 @@ func (this *RaftNode) broadcastHeartbeats() {
 						//-------------------------------------------------------------------------------------------/
 						// TODO
 						//-------------------------------------------------------------------------------------------/
-						this.nextIndex[peerId] = currentPeer_nextIndex - len(entries)
+						this.nextIndex[peerId] -= 1
 						if (aeType == "Heartbeat" && LogHeartbeatMessages) || aeType == "AppendEntries" {
 							this.write_log("%s reply from NODE %d was failure; Hence, decrementing its nextIndex", aeType, peerId)
 						}
